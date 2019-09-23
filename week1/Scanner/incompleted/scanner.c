@@ -135,6 +135,8 @@ Token* readConstChar(void) {
   // Must be letter
   if ((currentChar == EOF) || (charCodes[currentChar] != CHAR_LETTER)) {
     error(ERR_INVALIDCHARCONSTANT, ln, cn);
+    readChar();
+    return NULL;
   }
 
   char c = currentChar;
@@ -143,6 +145,8 @@ Token* readConstChar(void) {
   // Must be single letter (' right after above letter)
   if ((currentChar == EOF) || (charCodes[currentChar] != CHAR_SINGLEQUOTE)) {
     error(ERR_INVALIDCHARCONSTANT, ln, cn);
+    readChar();
+    return NULL;
   }
 
   // Return token
@@ -150,6 +154,7 @@ Token* readConstChar(void) {
   token->value = c;
   token->string[0] = c;
   token->string[1] = '\0';
+  readChar();
   return token;
 }
 
@@ -319,6 +324,8 @@ Token* getToken(void) {
 /******************************************************************/
 
 void printToken(Token *token) {
+
+  if (token == NULL) return;
 
   printf("%d-%d:", token->lineNo, token->colNo);
 
