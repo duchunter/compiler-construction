@@ -27,5 +27,5 @@ void error(ErrorCode err, int lineNo, int colNo) {
     printf("%d-%d:%s\n", lineNo, colNo, ERM_INVALIDSYMBOL);
     break;
   }
-  // exit(-1);
+  exit(-1);
 }

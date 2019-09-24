@@ -1,2 +1,3 @@
-0123456^7891
-'a'
+Program Example1; 'Example 1'
+Begin "a"
+End. (* Example 1 *)

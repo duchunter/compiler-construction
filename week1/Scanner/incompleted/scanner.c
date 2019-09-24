@@ -52,6 +52,22 @@ void skipComment() {
   error(ERR_ENDOFCOMMENT, lineNo, colNo);
 }
 
+// Skip comment ver 2 '...'
+void skipCommentVer2() {
+  while (currentChar != EOF) {
+    // Meet '
+    if (charCodes[currentChar] == CHAR_SINGLEQUOTE) {
+      readChar();
+      return;
+    }
+
+    readChar();
+  }
+
+  // Handle EOF
+  error(ERR_ENDOFCOMMENT, lineNo, colNo);
+}
+
 // Read ident or keyword (if match)
 Token* readIdentKeyword(void) {
   // Create token from first character
@@ -133,7 +149,8 @@ Token* readConstChar(void) {
   readChar();
 
   // Must be letter
-  if ((currentChar == EOF) || (charCodes[currentChar] != CHAR_LETTER)) {
+  // if ((currentChar == EOF) || (charCodes[currentChar] != CHAR_LETTER)) {
+  if (currentChar == EOF) {
     error(ERR_INVALIDCHARCONSTANT, ln, cn);
     readChar();
     return NULL;
@@ -144,6 +161,39 @@ Token* readConstChar(void) {
 
   // Must be single letter (' right after above letter)
   if ((currentChar == EOF) || (charCodes[currentChar] != CHAR_SINGLEQUOTE)) {
+    error(ERR_INVALIDCHARCONSTANT, ln, cn);
+    readChar();
+    return NULL;
+  }
+
+  // Return token
+  Token *token = makeToken(TK_CHAR, ln, cn);
+  token->value = c;
+  token->string[0] = c;
+  token->string[1] = '\0';
+  readChar();
+  return token;
+}
+
+// Read const char ver 2
+Token* readConstCharVer2(void) {
+  int ln = lineNo;
+  int cn = colNo;
+  readChar();
+
+  // Must be letter
+  // if ((currentChar == EOF) || (charCodes[currentChar] != CHAR_LETTER)) {
+  if (currentChar == EOF) {
+    error(ERR_INVALIDCHARCONSTANT, ln, cn);
+    readChar();
+    return NULL;
+  }
+
+  char c = currentChar;
+  readChar();
+
+  // Must be single letter (" right after above letter)
+  if ((currentChar == EOF) || (charCodes[currentChar] != CHAR_DOUBLEQUOTE)) {
     error(ERR_INVALIDCHARCONSTANT, ln, cn);
     readChar();
     return NULL;
@@ -200,9 +250,16 @@ Token* getToken(void) {
       readChar();
       return token;
 
+    // "
+    case CHAR_DOUBLEQUOTE:
+      return readConstCharVer2();
+
     // '
     case CHAR_SINGLEQUOTE:
-			return readConstChar();
+      readChar();
+      skipCommentVer2();
+      return getToken();
+			// return readConstChar();
 
     // <
 		case CHAR_LT:
@@ -293,15 +350,15 @@ Token* getToken(void) {
       ln = lineNo;
 			cn = colNo;
 			readChar();
-			if (currentChar == EOF) {
-				return makeToken(SB_LPAR, ln, cn);
-			}
-
-      if (charCodes[currentChar] == CHAR_TIMES) {
-        readChar();
-        skipComment();
-        return getToken();
-      }
+			// if (currentChar == EOF) {
+			// 	return makeToken(SB_LPAR, ln, cn);
+			// }
+      //
+      // if (charCodes[currentChar] == CHAR_TIMES) {
+      //   readChar();
+      //   skipComment();
+      //   return getToken();
+      // }
 
 			return makeToken(SB_LPAR, ln, cn);
 
@@ -325,7 +382,7 @@ Token* getToken(void) {
 
 void printToken(Token *token) {
 
-  if (token == NULL) return;
+  if (!token) return;
 
   printf("%d-%d:", token->lineNo, token->colNo);
 
@@ -333,7 +390,7 @@ void printToken(Token *token) {
   case TK_NONE: printf("TK_NONE\n"); break;
   case TK_IDENT: printf("TK_IDENT(%s)\n", token->string); break;
   case TK_NUMBER: printf("TK_NUMBER(%s)\n", token->string); break;
-  case TK_CHAR: printf("TK_CHAR(\'%s\')\n", token->string); break;
+  case TK_CHAR: printf("TK_CHAR(\"%s\")\n", token->string); break;
   case TK_EOF: printf("TK_EOF\n"); break;
 
   case KW_PROGRAM: printf("KW_PROGRAM\n"); break;
@@ -386,7 +443,7 @@ int scan(char *fileName) {
     return IO_ERROR;
 
   token = getToken();
-  while (token->tokenType != TK_EOF) {
+  while (!token || token->tokenType != TK_EOF) {
     printToken(token);
     free(token);
     token = getToken();
