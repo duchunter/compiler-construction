@@ -82,8 +82,8 @@ void compileBlock5(void) {
 }
 
 void compileConstDecls(void) {
-while (lookAhead->tokenType==TK_IDENT)
-compileConstDecl();
+  while (lookAhead->tokenType == TK_IDENT)
+  compileConstDecl();
 }
 
 void compileConstDecl(void) {
@@ -123,12 +123,15 @@ void compileVarDecl(void) {
 
 void compileSubDecls(void) {
   assert("Parsing subtoutines ....");
-  if (lookAhead->tokenType == KW_FUNCTION) {
-    compileFuncDecl();
-    compileSubDecls();
-  } else if (lookAhead->tokenType == KW_PROCEDURE) {
-    compileProcDecl();
-    compileSubDecls();
+  while (
+    lookAhead->tokenType == KW_FUNCTION
+    || lookAhead->tokenType == KW_PROCEDURE
+  ) {
+    if (lookAhead->tokenType == KW_FUNCTION) {
+      compileFuncDecl();
+    } else if (lookAhead->tokenType == KW_PROCEDURE) {
+      compileProcDecl();
+    }
   }
   assert("Subtoutines parsed ....");
 }
@@ -228,9 +231,8 @@ void compileBasicType(void) {
       eat(lookAhead->tokenType);
       break;
 
-    default:{
+    default:
       error(ERR_INVALIDBASICTYPE, lookAhead->lineNo, lookAhead->colNo);
-    }
   }
 }
 
@@ -456,22 +458,26 @@ void compileExpression3(void) {
 
 void compileTerm(void) {
   compileFactor();
-  compileTerm2();
-}
-
-void compileTerm2(void) {
-  switch (lookAhead->tokenType) {
-    case SB_TIMES:
-    case SB_SLASH:
-      eat(lookAhead->tokenType);
-      compileFactor();
-      compileTerm2();
-      break;
-
-    default:
-      break;
+  while (lookAhead->tokenType == SB_TIMES || lookAhead->tokenType == SB_SLASH) {
+    eat(lookAhead->tokenType);
+    compileFactor();
   }
+  // compileTerm2();
 }
+
+// void compileTerm2(void) {
+//   switch (lookAhead->tokenType) {
+//     case SB_TIMES:
+//     case SB_SLASH:
+//       eat(lookAhead->tokenType);
+//       compileFactor();
+//       compileTerm2();
+//       break;
+//
+//     default:
+//       break;
+//   }
+// }
 
 void compileFactor(void) {
   switch (lookAhead->tokenType) {
