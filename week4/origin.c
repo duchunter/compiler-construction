@@ -83,7 +83,7 @@ void compileBlock5(void) {
 
 void compileConstDecls(void) {
   while (lookAhead->tokenType == TK_IDENT)
-  compileConstDecl();
+    compileConstDecl();
 }
 
 void compileConstDecl(void) {

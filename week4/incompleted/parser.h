@@ -1,4 +1,4 @@
-/* 
+/*
  * @copyright (c) 2008, Hedspi, Hanoi University of Technology
  * @author Huu-Duc Nguyen
  * @version 1.0
@@ -12,6 +12,7 @@ void eat(TokenType tokenType);
 
 void compileProgram(void);
 void compileBlock(void);
+void compileDeclarations(void);
 void compileBlock2(void);
 void compileBlock3(void);
 void compileBlock4(void);
