@@ -14,6 +14,10 @@ BEGIN
      A(.I.) := READI;
 END;
 
+VAR  A : ARRAY(. 10 .) OF T;
+     N : INTEGER;
+     CH : CHAR;
+
 PROCEDURE OUTPUT;
 VAR I : INTEGER;
 BEGIN
@@ -36,6 +40,10 @@ BEGIN
        I := I + 1;
      END
 END;
+
+VAR  A : ARRAY(. 10 .) OF T;
+     N : INTEGER;
+     CH : CHAR;
 
 BEGIN
    CH := 'y';

@@ -40,49 +40,24 @@ void compileProgram(void) {
 
 void compileBlock(void) {
   assert("Parsing a Block ....");
-  compileDeclarations();
-  compileBlock2();
+  if (lookAhead->tokenType == KW_CONST) {
+    eat(KW_CONST);
+    compileConstDecl();
+    compileConstDecls();
+    compileBlock2();
+  }
+  else compileBlock2();
   assert("Block parsed!");
 }
 
-void compileDeclarations(void) {
-  switch (lookAhead->tokenType) {
-    case KW_CONST:
-      eat(KW_CONST);
-      compileConstDecl();
-      compileConstDecls();
-      compileDeclarations();
-      break;
-
-    case KW_TYPE:
-      eat(KW_TYPE);
-      compileTypeDecl();
-      compileTypeDecls();
-      compileDeclarations();
-      break;
-
-    case KW_VAR:
-      eat(KW_VAR);
-      compileVarDecl();
-      compileVarDecls();
-      compileDeclarations();
-      break;
-
-    case KW_FUNCTION:
-    case KW_PROCEDURE:
-      compileSubDecls();
-      compileDeclarations();
-      break;
-
-    default:
-      break;
-  }
-}
-
 void compileBlock2(void) {
-  eat(KW_BEGIN);
-  compileStatements();
-  eat(KW_END);
+  if (lookAhead->tokenType == KW_TYPE) {
+    eat(KW_TYPE);
+    compileTypeDecl();
+    compileTypeDecls();
+    compileBlock3();
+  }
+  else compileBlock3();
 }
 
 void compileBlock3(void) {
@@ -108,7 +83,7 @@ void compileBlock5(void) {
 
 void compileConstDecls(void) {
   while (lookAhead->tokenType == TK_IDENT)
-  compileConstDecl();
+    compileConstDecl();
 }
 
 void compileConstDecl(void) {
