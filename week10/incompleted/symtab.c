@@ -1,4 +1,4 @@
-/*
+/* 
  * @copyright (c) 2008, Hedspi, Hanoi University of Technology
  * @author Huu-Duc Nguyen
  * @version 1.0
@@ -93,7 +93,7 @@ ConstantValue* makeCharConstant(char ch) {
 ConstantValue* duplicateConstantValue(ConstantValue* v) {
   ConstantValue* value = (ConstantValue*) malloc(sizeof(ConstantValue));
   value->type = v->type;
-  if (v->type == TP_INT)
+  if (v->type == TP_INT) 
     value->intValue = v->intValue;
   else
     value->charValue = v->charValue;
@@ -115,7 +115,7 @@ Object* createProgramObject(char *programName) {
   strcpy(program->name, programName);
   program->kind = OBJ_PROGRAM;
   program->progAttrs = (ProgramAttributes*) malloc(sizeof(ProgramAttributes));
-  program->progAttrs->scope = createScope(program, NULL);
+  program->progAttrs->scope = createScope(program,NULL);
   symtab->program = program;
 
   return program;
@@ -242,11 +242,11 @@ void addObject(ObjectNode **objList, Object* obj) {
   ObjectNode* node = (ObjectNode*) malloc(sizeof(ObjectNode));
   node->object = obj;
   node->next = NULL;
-  if ((*objList) == NULL)
+  if ((*objList) == NULL) 
     *objList = node;
   else {
     ObjectNode *n = *objList;
-    while (n->next != NULL)
+    while (n->next != NULL) 
       n = n->next;
     n->next = node;
   }
@@ -254,7 +254,7 @@ void addObject(ObjectNode **objList, Object* obj) {
 
 Object* findObject(ObjectNode *objList, char *name) {
   while (objList != NULL) {
-    if (strcmp(objList->object->name, name) == 0)
+    if (strcmp(objList->object->name, name) == 0) 
       return objList->object;
     else objList = objList->next;
   }
@@ -269,7 +269,7 @@ void initSymTab(void) {
 
   symtab = (SymTab*) malloc(sizeof(SymTab));
   symtab->globalObjectList = NULL;
-
+  
   obj = createFunctionObject("READC");
   obj->funcAttrs->returnType = makeCharType();
   addObject(&(symtab->globalObjectList), obj);
@@ -327,6 +327,8 @@ void declareObject(Object* obj) {
       break;
     }
   }
-
+ 
   addObject(&(symtab->currentScope->objList), obj);
 }
+
+
