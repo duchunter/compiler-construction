@@ -566,6 +566,9 @@ void compileArguments(ObjectNode* paramList) {
   case KW_END:
   case KW_ELSE:
   case KW_THEN:
+    if (paramList != NULL) {
+      error(ERR_PARAMETERS_ARGUMENTS_INCONSISTENCY, currentToken->lineNo, currentToken->colNo);
+    }
     break;
   default:
     error(ERR_INVALID_ARGUMENTS, lookAhead->lineNo, lookAhead->colNo);

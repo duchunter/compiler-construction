@@ -1,4 +1,4 @@
-/* 
+/*
  * @copyright (c) 2008, Hedspi, Hanoi University of Technology
  * @author Huu-Duc Nguyen
  * @version 1.0
@@ -55,7 +55,7 @@ int compareType(Type* type1, Type* type2) {
   if (type1->typeClass == type2->typeClass) {
     if (type1->typeClass == TP_ARRAY) {
       if (type1->arraySize == type2->arraySize)
-	return compareType(type1->elementType, type2->elementType);
+	      return compareType(type1->elementType, type2->elementType);
       else return 0;
     } else return 1;
   } else return 0;
@@ -93,7 +93,7 @@ ConstantValue* makeCharConstant(char ch) {
 ConstantValue* duplicateConstantValue(ConstantValue* v) {
   ConstantValue* value = (ConstantValue*) malloc(sizeof(ConstantValue));
   value->type = v->type;
-  if (v->type == TP_INT) 
+  if (v->type == TP_INT)
     value->intValue = v->intValue;
   else
     value->charValue = v->charValue;
@@ -242,11 +242,11 @@ void addObject(ObjectNode **objList, Object* obj) {
   ObjectNode* node = (ObjectNode*) malloc(sizeof(ObjectNode));
   node->object = obj;
   node->next = NULL;
-  if ((*objList) == NULL) 
+  if ((*objList) == NULL)
     *objList = node;
   else {
     ObjectNode *n = *objList;
-    while (n->next != NULL) 
+    while (n->next != NULL)
       n = n->next;
     n->next = node;
   }
@@ -254,7 +254,7 @@ void addObject(ObjectNode **objList, Object* obj) {
 
 Object* findObject(ObjectNode *objList, char *name) {
   while (objList != NULL) {
-    if (strcmp(objList->object->name, name) == 0) 
+    if (strcmp(objList->object->name, name) == 0)
       return objList->object;
     else objList = objList->next;
   }
@@ -269,7 +269,7 @@ void initSymTab(void) {
 
   symtab = (SymTab*) malloc(sizeof(SymTab));
   symtab->globalObjectList = NULL;
-  
+
   obj = createFunctionObject("READC");
   obj->funcAttrs->returnType = makeCharType();
   addObject(&(symtab->globalObjectList), obj);
@@ -327,8 +327,6 @@ void declareObject(Object* obj) {
       break;
     }
   }
- 
+
   addObject(&(symtab->currentScope->objList), obj);
 }
-
-
