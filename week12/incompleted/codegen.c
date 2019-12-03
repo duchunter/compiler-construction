@@ -21,6 +21,9 @@ CodeBlock* codeBlock;
 
 void genVariableAddress(Object* var) {
   // TODO
+  int level = symtab->currentScope->frameSize;
+  int offset = var->varAttrs->localOffset;
+  genLA(level, offset);
 }
 
 void genVariableValue(Object* var) {
