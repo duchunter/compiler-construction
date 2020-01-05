@@ -1,0 +1,63 @@
+# Week 1: scanner only, scan file and log to console token name and its position
+# Week 4: add parser, scan file and log like week 1 but add parsing block message
+# Week 7, 8: add symtab and debug, but still return void instead of type
+# Week 9, 10: semantic with type checking
+
+### charcode.c
+- Map ASCII value to charcode
+
+### charcode.h
+- List of all available charcodes
+
+### error.c
+- Decide how to print error
+
+### error.h
+- List of available errors and messages
+
+### reader.c
+- read character from input stream
+
+### reader.h
+
+
+### token.c
+- makeToken
+- List of keywords
+- Compare string with keyword
+- Check keyword
+
+### token.h
+- Config: max ident length, max number length, total number of keyword
+- List of all token in KPL
+
+### debug.c
+- print object with value
+
+### debug.h
+
+### scanner.c
+- have currentChar, lineNo, colNo, charCodes[], readChar()
+- scanner code
+- print token to console when scan
+- from week 4 add getValidToken()
+
+### parser.c
+- have currentToken, lookAhead, eat()
+- scanner code
+- after week 7 add symtab code
+- from week 9 return type
+
+### symtab.h
+- define structure and some basic kind of type, object, param,...
+
+### symtab.c
+- have semantic code (create and free stuff)
+- init symtab with some global functions
+- have enter/exit block, lookup/find/declare/add object (lookup removed from week 9)
+
+### semantics.h
+
+
+### semantics.c
+- rule checking
